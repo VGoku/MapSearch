@@ -5,9 +5,7 @@ import { MapContext } from "./MapContextObject";
  * useMapController
  * ----------------
  * Access the shared map controller.
- * Now includes:
- * - openPopup(id)
- * - activePopupId ref
+ * Pure accessor — no local state, no mutations.
  */
 export function useMapController() {
   const ctx = useContext(MapContext);

@@ -19,6 +19,16 @@ const defaultIcon = L.icon({
 L.Marker.prototype.options.icon = defaultIcon;
 
 /**
+ * Glow icon
+ */
+const glowIcon = L.divIcon({
+  className: "leaflet-marker-glow leaflet-marker-bounce",
+  iconSize: [32, 32],
+  iconAnchor: [16, 16],
+});
+
+
+/**
  * Capture map instance
  */
 function MapInitializer({ setMapRef }: { setMapRef: (map: L.Map) => void }) {
@@ -30,16 +40,14 @@ function MapInitializer({ setMapRef }: { setMapRef: (map: L.Map) => void }) {
 export default function MapView() {
   const { setMapRef, registerMarker, activePopupId } = useMapController();
 
-  // Local state for marker clicks
   const [clickedClub, setClickedClub] = useState<string | null>(null);
 
-  // Derived state: external popup request OR marker click
   const activeClub = activePopupId.current ?? clickedClub;
 
   return (
     <MapContainer
       className="w-full h-full"
-      center={[25.8, -80.13]} // Miami
+      center={[25.8, -80.13]}
       zoom={12}
       scrollWheelZoom={true}
     >
@@ -57,12 +65,13 @@ export default function MapView() {
           ref={(marker) => {
             if (marker) registerMarker(club.id, marker);
           }}
+          icon={activeClub === club.id ? glowIcon : defaultIcon}
           eventHandlers={{
             click: () => setClickedClub(club.id),
           }}
         >
           {activeClub === club.id && (
-            <Popup>
+            <Popup className="club-popup">
               <div className="text-sm">
                 <strong>{club.name}</strong>
                 <br />
